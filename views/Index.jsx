@@ -7,19 +7,22 @@ class Index extends React.Component {
             <div>
                 <h1>Index Page</h1>
                 <a href="/logs/new">Create a new log</a>
-                <ul>
-                    {
-                        logs.map((log, i) => {
-                            return (
-                                <li key={i}>
-                                    Title: {log.title}
-                                </li>
-                            )
-
-                        }
+                <br />
+                <br />
+                {
+                    logs.map((log, i) => {
+                        return (
+                            // <li key={i}>
+                            //     Title: {log.title}
+                            // </li>
+                            <>
+                                <a href={`/logs/${log._id}`} key={i}>{log.title}</a> <br />
+                            </>
                         )
+
                     }
-                </ul>
+                    )
+                }
             </div>
         )
     }

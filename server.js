@@ -81,7 +81,7 @@ app.post('/logs', async (req, res) => {
     try {
         req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false
         const createdLogs = await Logs.create(req.body)
-        res.status(201).redirect('/logs/new')
+        res.status(201).redirect('/logs')
     } catch (err) {
         res.status(400).send(err)
     }
@@ -89,7 +89,18 @@ app.post('/logs', async (req, res) => {
 
 
 
+// Show route
 
+app.get('/logs/:id', async (req, res) => {
+    try {
+        const foundLog = await Logs.findById(req.params.id)
+        res.render('Show', {
+            logs: foundLog
+        })
+    } catch (err) {
+        res.status(400).send(err)
+    }
+})
 
 
 
