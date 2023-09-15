@@ -54,6 +54,14 @@ app.get('/logs/seed', async (req, res) => {
     }
 })
 
+// Index Route
+
+app.get('/logs', async (req, res) => {
+    const foundLogs = await Logs.find({})
+    res.status(200).render('Index', {
+        logs: foundLogs
+    })
+})
 
 
 
