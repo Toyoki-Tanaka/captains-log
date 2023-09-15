@@ -22,6 +22,10 @@ const jsxViewEngine = require('jsx-view-engine');
 app.set('view engine', 'jsx');
 app.engine('jsx', jsxViewEngine());
 
+app.use((req, res, next) => {
+    console.log(("Middleware: I run for all routes"));
+    next();
+});
 
 app.use(express.static('public'));
 
@@ -42,6 +46,17 @@ app.get('/logs/new', async (req, res) => {
     }
 })
 
+// Create route
+
+app.post('/logs', async (req, res) => {
+    try {
+        req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false
+
+        res.send(req.body)
+    } catch (err) {
+        res.status(400).send(err)
+    }
+})
 
 
 
