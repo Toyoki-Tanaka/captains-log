@@ -17,6 +17,7 @@ class Index extends React.Component {
                             // </li>
                             <>
                                 <a href={`/logs/${log._id}`} key={i}>{log.title}</a> <br />
+                                <a href={`/logs/${log._id}/edit`}>Edit this entry</a>
                                 <form action={`/logs/${log._id}?_method=DELETE`} method="POST">
                                     <input type="submit" value='DELETE' />
                                 </form>

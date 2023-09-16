@@ -75,6 +75,22 @@ app.get('/logs/new', async (req, res) => {
     }
 })
 
+// Update route
+
+app.put('/logs/:id', async (req, res) => {
+    try {
+        req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false
+        const updatedLog = await Logs.findByIdAndUpdate(
+            req.params.id, req.body, { new: true })
+        res.status(201).redirect(`/logs`)
+    } catch (err) {
+        res.status(400).send(err)
+    }
+})
+
+
+
+
 // Delete route
 
 app.delete('/logs/:id', async (req, res) => {
@@ -101,6 +117,20 @@ app.post('/logs', async (req, res) => {
     }
 })
 
+
+// Edit route 
+
+app.get('/logs/:id/edit', async (req, res) => {
+    try {
+        const foundLog = await Logs.findById(req.params.id)
+        res.render('Edit', {
+            logs: foundLog
+        })
+        console.log(foundLog)
+    } catch (err) {
+        res.status(400).send(err)
+    }
+})
 
 
 // Show route
