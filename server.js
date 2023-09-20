@@ -1,9 +1,10 @@
-require('dotenv').config();
-const express = require('express');
+require('dotenv').config()
+const express = require('express')
 const app = express();
 const Logs = require('./models/logs')
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose')
+const logsRouter = require('./controllers/logs')
 const methodOverride = require('method-override')
 /// Database Connection
 
@@ -37,114 +38,7 @@ app.use(methodOverride('_method'));
 
 
 
-// Seed Route
-
-app.get('/logs/seed', async (req, res) => {
-    try {
-        await Logs.create([
-            {
-                title: "Benjamin",
-                entry: "My day",
-                shipIsBroken: false
-            }
-        ])
-    }
-    catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-// Index Route
-
-app.get('/logs', async (req, res) => {
-    const foundLogs = await Logs.find({})
-    res.status(200).render('Index', {
-        logs: foundLogs
-    })
-})
-
-
-
-
-// New route
-app.get('/logs/new', async (req, res) => {
-    try {
-        res.render('New')
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-// Update route
-
-app.put('/logs/:id', async (req, res) => {
-    try {
-        req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false
-        const updatedLog = await Logs.findByIdAndUpdate(
-            req.params.id, req.body, { new: true })
-        res.status(201).redirect(`/logs`)
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-
-
-
-// Delete route
-
-app.delete('/logs/:id', async (req, res) => {
-    try {
-        await Logs.findByIdAndDelete(req.params.id)
-        res.status(200).redirect('/logs')
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-
-
-
-// Create route
-
-app.post('/logs', async (req, res) => {
-    try {
-        req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false
-        const createdLogs = await Logs.create(req.body)
-        res.status(201).redirect('/logs')
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-
-// Edit route 
-
-app.get('/logs/:id/edit', async (req, res) => {
-    try {
-        const foundLog = await Logs.findById(req.params.id)
-        res.render('Edit', {
-            logs: foundLog
-        })
-        console.log(foundLog)
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-
-// Show route
-
-app.get('/logs/:id', async (req, res) => {
-    try {
-        const foundLog = await Logs.findById(req.params.id)
-        res.render('Show', {
-            logs: foundLog
-        })
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
+app.use('/', logsRouter)
 
 
 
